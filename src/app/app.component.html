@@ -1,9 +1,19 @@
-<mat-toolbar>
+<mat-toolbar color="primary">
   <mat-icon>local_fire_department</mat-icon>
   <span>Kanban Fire</span>
 </mat-toolbar>
 
 <div class="content-wrapper">
+
+  <button
+    mat-raised-button
+    color="primary"
+    class="new-task"
+    (click)="newTask()"
+  >
+    <mat-icon>add</mat-icon> Add Task
+  </button>
+
   <div class="container-wrapper">
 
     <div class="container">
