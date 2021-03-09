@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 
+import { environment } from 'src/environments/environment';
 import { TaskDialogComponent, TaskDialogResult } from './task-dialog/task-dialog.component';
 import { Task } from './task/task.types';
 
@@ -23,7 +24,9 @@ export class AppComponent {
 
   constructor(
     private dialog: MatDialog,
-  ) {}
+  ) {
+    console.log(environment?.firebase);
+  }
 
   drop(event: CdkDragDrop<Task[]>): void {
     if (event.previousContainer === event.container) {
