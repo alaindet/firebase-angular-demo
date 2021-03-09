@@ -16,16 +16,16 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'firebase-angular-demo'`, () => {
+  it(`should have as title 'kanban-fire'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('firebase-angular-demo');
+    expect(app.title).toEqual('kanban-fire');
   });
 
   it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement;
-    expect(compiled.querySelector('.content span').textContent).toContain('firebase-angular-demo app is running!');
+    expect(compiled.querySelector('.content span').textContent).toContain('kanban-fire app is running!');
   });
 });
