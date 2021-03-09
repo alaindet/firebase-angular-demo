@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "fir-angular-demo-27c6a": {
+      "hosting": {
+        "firebase-angular-demo": [
+          "fir-angular-demo-27c6a"
+        ]
+      }
+    }
+  }
+}
