@@ -10,8 +10,8 @@
     "e2e": "ng e2e",
     "init-env": "cp ./env.example ./env.dev && cp ./env.example ./env.prod",
     "build-env": "node ./scripts/build-env.js",
-    "build-env:dev": "node ./scripts/build-env.js --env=dev",
-    "build-env:prod": "node ./scripts/build-env.js --env=prod"
+    "build-env:dev": "node ./scripts/build-env.js --transform",
+    "build-env:prod": "node ./scripts/build-env.js --env=prod --transform"
   },
   "private": true,
   "dependencies": {

@@ -66,16 +66,15 @@ if (rawEnv.error) {
 let data = dotenvParseVariables(rawEnv.parsed);
 
 if (options.transform) {
-  for (const key in parsedEnv) {
+  const transformed = {};
+  for (const key in data) {
     const newKey = snakeToCamel(key, SEPARATOR);
-    data[newKey] = parsedEnv[key];
+    transformed[newKey] = data[key];
   }
+  data = deflatten(transformed, SEPARATOR);
 }
 
-// Build the tree
-const tree = deflatten(data, SEPARATOR);
-
-let output = JSON.stringify(tree, null, 2);
+let output = JSON.stringify(data, null, 2);
 output = output.replace(/"(.+?)":/g, '$1:');
 output = `export const environment = ${output};`;
 
