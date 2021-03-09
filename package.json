@@ -9,6 +9,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "init-env": "cp ./env.example ./env.dev && cp ./env.example ./env.prod",
+    "build-env": "node ./scripts/build-env.js",
     "build-env:dev": "node ./scripts/build-env.js --env=dev",
     "build-env:prod": "node ./scripts/build-env.js --env=prod"
   },
@@ -39,6 +40,7 @@
     "@types/node": "^12.11.1",
     "codelyzer": "^6.0.0",
     "dotenv": "^8.2.0",
+    "dotenv-parse-variables": "^2.0.0",
     "firebase-tools": "^8.0.0",
     "fuzzy": "^0.1.3",
     "inquirer": "^6.2.2",
