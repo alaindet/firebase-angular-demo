@@ -1,9 +1,9 @@
 {
   "targets": {
-    "fir-angular-demo-27c6a": {
+    "kanban-demo-f4dd7": {
       "hosting": {
         "firebase-angular-demo": [
-          "fir-angular-demo-27c6a"
+          "kanban-demo-f4dd7"
         ]
       }
     }
