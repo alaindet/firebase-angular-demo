@@ -1,10 +1,23 @@
 import { Component } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 
-import { environment } from 'src/environments/environment';
 import { TaskDialogComponent, TaskDialogResult } from './task-dialog/task-dialog.component';
 import { Task } from './task/task.types';
+
+const getObservable = (
+  collection: AngularFirestoreCollection<Task>,
+): BehaviorSubject<Task[]>=> {
+  const subject = new BehaviorSubject<Task[]>([]);
+  collection
+    .valueChanges({ idField: 'id' })
+    .subscribe(
+      (tasks: Task[]) => subject.next(tasks)
+    );
+  return subject;
+};
 
 @Component({
   selector: 'app-root',
@@ -13,25 +26,35 @@ import { Task } from './task/task.types';
 })
 export class AppComponent {
 
-  todo: Task[] = [
-    { title: 'Buy milk', description: 'Go to the store and buy it' },
-    { title: 'Create Kanban board', description: 'Develop a Kanban app' },
-  ];
-
-  inProgress: Task[] = [];
-
-  done: Task[] = [];
+  todo: BehaviorSubject<Task[]> = getObservable(
+    this.store.collection('todo')
+  );
+  inProgress: BehaviorSubject<Task[]> = getObservable(
+    this.store.collection('inProgress')
+  );
+  done: BehaviorSubject<Task[]> = getObservable(
+    this.store.collection('done')
+  );
 
   constructor(
     private dialog: MatDialog,
-  ) {
-    console.log(environment?.firebase);
-  }
+    private store: AngularFirestore,
+  ) {}
 
   drop(event: CdkDragDrop<Task[]>): void {
+
     if (event.previousContainer === event.container) {
       return;
     }
+
+    const item = event.previousContainer.data[event.previousIndex];
+    this.store.firestore.runTransaction(() => {
+      return Promise.all([
+        this.store.collection(event.previousContainer.id).doc(item.id).delete(),
+        this.store.collection(event.container.id).add(item),
+      ]);
+    });
+
     transferArrayItem(
       event.previousContainer.data,
       event.container.data,
@@ -41,6 +64,7 @@ export class AppComponent {
   }
 
   edit(list: 'todo' | 'inProgress' | 'done', task: Task): void {
+
     const dialogRef = this.dialog.open(TaskDialogComponent, {
       data: {
         task,
@@ -52,12 +76,10 @@ export class AppComponent {
       .afterClosed()
       .subscribe(
         (result: TaskDialogResult) => {
-          const dataList = this[list];
-          const taskIndex = dataList.indexOf(task);
           if (result.delete) {
-            dataList.splice(taskIndex, 1);
+            this.store.collection(list).doc(task.id).delete();
           } else {
-            dataList[taskIndex] = task;
+            this.store.collection(list).doc(task.id).update(task);
           }
         },
       );
@@ -74,7 +96,9 @@ export class AppComponent {
     dialogRef
       .afterClosed()
       .subscribe(
-        (result: TaskDialogResult) => this.todo.push(result.task),
+        (result: TaskDialogResult) => {
+          this.store.collection('todo').add(result.task);
+        },
       );
   }
 }

@@ -22,13 +22,15 @@
         cdkDropList
         id="todo"
         #todoList="cdkDropList"
-        [cdkDropListData]="todo"
+        [cdkDropListData]="todo | async"
         [cdkDropListConnectedTo]="[inProgressList, doneList]"
         (cdkDropListDropped)="drop($event)"
       >
-        <p *ngIf="!todo.length" class="empty-label">Empty list</p>
+        <p *ngIf="(todo | async)?.length === 0" class="empty-label">
+          Empty list
+        </p>
         <app-task
-          *ngFor="let task of todo"
+          *ngFor="let task of todo | async"
           cdkDrag
           [task]="task"
           (edit)="edit('todo', $event)"
@@ -42,13 +44,15 @@
         cdkDropList
         id="inProgress"
         #inProgressList="cdkDropList"
-        [cdkDropListData]="inProgress"
+        [cdkDropListData]="inProgress | async"
         [cdkDropListConnectedTo]="[todoList, doneList]"
         (cdkDropListDropped)="drop($event)"
       >
-        <p *ngIf="!inProgress.length" class="empty-label">Empty list</p>
+        <p *ngIf="(inProgress | async)?.length === 0" class="empty-label">
+          Empty list
+        </p>
         <app-task
-          *ngFor="let task of inProgress"
+          *ngFor="let task of inProgress | async"
           cdkDrag
           [task]="task"
           (edit)="edit('inProgress', $event)"
@@ -62,13 +66,15 @@
         cdkDropList
         id="done"
         #doneList="cdkDropList"
-        [cdkDropListData]="done"
+        [cdkDropListData]="done | async"
         [cdkDropListConnectedTo]="[inProgressList, todoList]"
         (cdkDropListDropped)="drop($event)"
       >
-        <p *ngIf="!done.length" class="empty-label">Empty list</p>
+        <p *ngIf="(done | async)?.length === 0" class="empty-label">
+          Empty list
+        </p>
         <app-task
-          *ngFor="let task of done"
+          *ngFor="let task of done | async"
           cdkDrag
           [task]="task"
           (edit)="edit('done', $event)"
